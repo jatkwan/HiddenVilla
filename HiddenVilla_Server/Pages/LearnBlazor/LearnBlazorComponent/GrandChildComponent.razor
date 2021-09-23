@@ -1,0 +1,14 @@
+﻿<div>
+    <h3>Grand Child Component</h3>
+    <p>Message from GrandParent: @MessageToGrandChild</p>
+    <p>Lucky Number: @LuckyNumber</p>
+</div>
+
+@code {
+    [CascadingParameter(Name = "Message")]
+    public string MessageToGrandChild { get; set; }
+
+    [CascadingParameter(Name = "Number")]
+    public string LuckyNumber { get; set; }
+}
+

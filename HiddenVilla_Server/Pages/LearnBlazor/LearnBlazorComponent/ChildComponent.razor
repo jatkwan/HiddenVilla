@@ -1,0 +1,25 @@
+﻿@inject IJSRuntime JSRuntime
+
+<div>
+    <div class="alert alert-info">@Title</div>
+    <span>@ChildContent</span>
+    <button class="btn btn-success" @onclick="OnClickBtnMethod">Click Me!</button>
+</div>
+<GrandChildComponent></GrandChildComponent>
+
+@code
+{
+    [Parameter]
+    public string Title { get; set; }
+
+    [Parameter]
+    public RenderFragment ChildContent { get; set; }
+
+    [Parameter]
+    public EventCallback<MouseEventArgs> OnClickBtnMethod { get; set; }
+
+    public async Task ToastrSuccess()
+    {
+        await JSRuntime.ToastrSuccess("Success Message from child component");
+    }
+}

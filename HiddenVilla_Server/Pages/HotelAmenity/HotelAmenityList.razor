@@ -1,0 +1,81 @@
+﻿@page "/hotel-amenity"
+@using Models
+@using Business.Repository.IRepository
+@inject IHotelAmenityRepository HotelAmenityRepository
+@inject NavigationManager NavigationManager
+@inject IJSRuntime JsRuntime
+@attribute [Authorize(Roles = Common.SD.Role_Admin)]
+
+<div class="row mt-4">
+    <div class="col-8">
+        <h4 class="card-title text-info">Hotel Amenity</h4>
+    </div>
+    <div class="col-3 offset-1">
+        <NavLink href="hotel-amenity/create" class="btn btn-info form-control">Add New Amenity</NavLink>
+    </div>
+    <table class="table table-bordered table-hover mt-4">
+        <thead>
+            <tr>
+                <th>Name</th>
+                <th>Timming</th>
+                <th>Icon</th>
+                <th>Actions</th>
+            </tr>
+        </thead>
+        <tbody>
+            @if (HotelAmenity.Any())
+            {
+                foreach (var amenity in HotelAmenity)
+                {
+                    <tr>
+                        <td>@amenity.Name</td>
+                        <td>@amenity.Timming</td>
+                        <td><i class="@amenity.Icon"></i></td>
+                        <td>
+                            <NavLink href="@($"hotel-amenity/edit/{amenity.Id}")" class="btn btn-primary">Edit</NavLink>
+                            <button class="btn btn-danger" @onclick="()=>HandleDelete(amenity.Id)">Delete</button>
+                        </td>
+                    </tr>
+                }
+            }
+            else
+            {
+                <tr>
+                    <td colspan="4">No records found</td>
+                </tr>
+            }
+        </tbody>
+    </table>
+</div>
+<DeleteConfirmation IsParentProcessing="IsProcessing" ConfirmationChanged="ConfirmDelete_Click"></DeleteConfirmation>
+
+@code {
+    private IEnumerable<HotelAmenityDTO> HotelAmenity { get; set; } = new List<HotelAmenityDTO>();
+    private int? DeleteAmenityId { get; set; } = null;
+    private bool IsProcessing { get; set; } = false;
+
+    protected override async Task OnInitializedAsync()
+    {
+        HotelAmenity = await HotelAmenityRepository.GetAllHotelAmenity();
+    }
+
+    private async Task HandleDelete(int amenityId)
+    {
+        DeleteAmenityId = amenityId;
+        await JsRuntime.InvokeVoidAsync("ShowDeleteConfirmation");
+    }
+
+    public async Task ConfirmDelete_Click(bool isConfirmed)
+    {
+        IsProcessing = true;
+
+        if (isConfirmed && DeleteAmenityId != null)
+        {
+            await HotelAmenityRepository.DeleteHotelAmenity(DeleteAmenityId.Value);
+            await JsRuntime.ToastrSuccess("Hotel amenity deleted successfully");
+            HotelAmenity = await HotelAmenityRepository.GetAllHotelAmenity();
+        }
+        await JsRuntime.InvokeVoidAsync("HideDeleteConfirmation");
+        IsProcessing = false;
+    }
+}

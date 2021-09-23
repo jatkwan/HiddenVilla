@@ -1,0 +1,27 @@
+﻿@using HiddenVilla_Server.Model
+
+<div class="bg-light border p-2 col-5 offset-1" @onclick="(args)=> AmenitiyOnClick(args, Ammenitie.Name)">
+    <h4 class="text-secondary">Ammenities - @Ammenitie.Id</h4>
+    @Ammenitie.Name<br />
+    @Ammenitie.Description<br />
+    <p>RF from parent - @Ref1 @Ref2 </p>
+</div>
+
+@code {
+    [Parameter]
+    public Ammenities Ammenitie { get; set; }
+
+    [Parameter]
+    public EventCallback<string> OnAmenitieClicked { get; set; }
+
+    [Parameter]
+    public RenderFragment Ref1 { get; set; }
+
+    [Parameter]
+    public RenderFragment Ref2 { get; set; }
+
+    protected async Task AmenitiyOnClick(MouseEventArgs e, string name)
+    {
+        await OnAmenitieClicked.InvokeAsync((string)name);
+    }
+}
