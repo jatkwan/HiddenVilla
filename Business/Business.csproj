@@ -9,6 +9,7 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\DataAcess\DataAcess.csproj" />
     <ProjectReference Include="..\Models\Models.csproj" />
   </ItemGroup>
