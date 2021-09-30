@@ -49,7 +49,7 @@ namespace HiddenVilla_API.Controllers
                         }
                     },
                     Mode = "payment",
-                    SuccessUrl = domain + "/success-paymnet?session_id={{CHECKOUT_SESSION_ID}}",
+                    SuccessUrl = domain + "/success-payment?session_id={{CHECKOUT_SESSION_ID}}",
                     CancelUrl = domain + payment.ReturnUrl
                 };
 

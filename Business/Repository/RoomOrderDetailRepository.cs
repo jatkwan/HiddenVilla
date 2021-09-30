@@ -76,27 +76,22 @@ namespace Business.Repository
             }
         }
 
-        public async Task<bool> IsRoomBooked(int roomId, DateTime checkInDate, DateTime checkOutDate)
+        public async Task<RoomOrderDetailDTO> MarkPaymentSuccessful(int id)
         {
-            bool status = false;
-
-            var existingBooking = await _db.RoomOrderDetails.Where(x => x.RoomId == roomId && x.IsPaymentSuccessful &&
-            //check if checkin date that user want does not fall in between any dates for room that is booked
-            ((checkInDate.Date < x.CheckOutDate && checkInDate.Date > x.CheckInDate)
-            //check if checkout date that user wants does not fall in between any dates for room that is booked
-            || (checkOutDate.Date > x.CheckInDate.Date && checkInDate.Date < x.CheckInDate.Date))).FirstOrDefaultAsync();
-
-            if (existingBooking != null)
+            var data = await _db.RoomOrderDetails.FindAsync(id);
+            if (data == null)
             {
-                status = true;
+                return null;
             }
-
-            return status;
-        }
-
-        public Task<RoomOrderDetailDTO> MarkPaymentSuccessful(int id)
-        {
-            throw new NotImplementedException();
+            if (!data.IsPaymentSuccessful)
+            {
+                data.IsPaymentSuccessful = true;
+                data.Status = SD.Status_Booked;
+                var markPaymentSucessful = _db.RoomOrderDetails.Update(data);
+                await _db.SaveChangesAsync();
+                return _mapper.Map<RoomOrderDetail, RoomOrderDetailDTO>(markPaymentSucessful.Entity);
+            }
+            return new RoomOrderDetailDTO();
         }
 
         public Task<bool> UpdateOrderStatus(int roomOrderId, string status)

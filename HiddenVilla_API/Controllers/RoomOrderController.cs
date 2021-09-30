@@ -1,6 +1,7 @@
 ﻿using Business.Repository.IRepository;
 using Microsoft.AspNetCore.Mvc;
 using Models;
+using Stripe.Checkout;
 using System;
 using System.Collections.Generic;
 using System.Linq;
@@ -32,6 +33,32 @@ namespace HiddenVilla_API.Controllers
                 return BadRequest(new ErrorModel()
                 {
                     ErrorMessage = "Error while creating Room Details / Booking"
+                });
+            }
+        }
+
+        [HttpPost]
+        public async Task<IActionResult> PaymentSucessful([FromBody] RoomOrderDetailDTO roomOrderDetail)
+        {
+            var service = new SessionService();
+            var sessionDetail = service.Get(roomOrderDetail.StripeSessionId);
+            if (sessionDetail.PaymentStatus == "paid")
+            {
+                var result = await _repository.MarkPaymentSuccessful(roomOrderDetail.Id);
+                if (result == null)
+                {
+                    return BadRequest(new ErrorModel()
+                    {
+                        ErrorMessage = "Can not mark payment sucessful"
+                    });
+                }
+                return Ok(result);
+            }
+            else
+            {
+                return BadRequest(new ErrorModel()
+                {
+                    ErrorMessage = "Can not mark payment sucessful"
                 });
             }
         }

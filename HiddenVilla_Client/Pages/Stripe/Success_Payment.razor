@@ -1,8 +1,16 @@
 ﻿@page "/success-payment"
-@inject IRoomOrderDetailService roomOrderDetailService
 @inject ILocalStorageService localStorage
+@inject IRoomOrderDetailService roomOrderDetailService
 
-    <div class="container">
+<div class="container">
+    @if (!IsPaymentCompleted)
+    {
+        <div style="position:fixed;top:50%;left:50%;margin-top:-50px;margin-left:-100px;">
+            <img src="images/ajax-loader.gif" />
+        </div>
+    }
+    else
+    {
         <div class="row mt-4 pt-4">
             <div class="col-10 offset-1 text-center">
                 <h2 class="text-warning">Booking Confirmed</h2>
@@ -12,24 +20,26 @@
                 <img src="/images/confirmation.jpg" width="100%" style="border-radius:30px;" />
             </div>
         </div>
-    </div>
+    }
+</div>
 
-    @code {
-        private bool IsPaymentCompleted { get; set; }
-        private int OrderId { get; set; }
+@code {
+    private bool IsPaymentCompleted { get; set; } = false;
+    private int OrderId { get; set; }
 
-        protected override async Task OnInitializedAsync()
+    protected override async Task OnInitializedAsync()
+    {
+        await Task.Delay(5000);
+        var orderDetails = await localStorage.GetItemAsync<RoomOrderDetailDTO>(SD.Local_RoomOrderDetails);
+        OrderId = orderDetails.Id;
+
+        var finalRoomOrderDetails = await roomOrderDetailService.MarkPaymentSuccessful(orderDetails);
+        if (finalRoomOrderDetails.Status == SD.Status_Booked)
         {
-            var orderDetails = await localStorage.GetItemAsync<RoomOrderDetailDTO>(SD.Local_RoomOrderDetails);
-            OrderId = orderDetails.Id;
+            await localStorage.RemoveItemAsync(SD.Local_RoomOrderDetails);
+            await localStorage.RemoveItemAsync(SD.Local_InitialBooking);
 
-            var finalRoomOrderDetails = await roomOrderDetailService.MarkPaymentSuccessful(orderDetails);
-            if (finalRoomOrderDetails.Status == SD.Status_Booked)
-            {
-                await localStorage.RemoveItemAsync(SD.Local_RoomOrderDetails);
-                await localStorage.RemoveItemAsync(SD.Local_InitialBooking);
-
-                IsPaymentCompleted = true;
-            }
+            IsPaymentCompleted = true;
         }
     }
+}
