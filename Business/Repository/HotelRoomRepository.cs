@@ -1,11 +1,11 @@
-﻿using AutoMapper;
-using DataAcess.Data;
-using Microsoft.EntityFrameworkCore;
-using Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using AutoMapper;
+using DataAcess.Data;
+using Microsoft.EntityFrameworkCore;
+using Models;
 
 namespace Business.Repository.IRepository
 {
@@ -24,7 +24,7 @@ namespace Business.Repository.IRepository
         {
             HotelRoom hotelRoom = _mapper.Map<HotelRoomDTO, HotelRoom>(hotelRoomDTO);
             hotelRoom.CreatedDate = DateTime.Now;
-            hotelRoom.CreatedBy = "";
+            hotelRoom.CreatedBy = string.Empty;
             var addedHotelRoom = await _db.HotelRooms.AddAsync(hotelRoom);
             await _db.SaveChangesAsync();
             return _mapper.Map<HotelRoom, HotelRoomDTO>(addedHotelRoom.Entity);
@@ -41,6 +41,7 @@ namespace Business.Repository.IRepository
                 _db.HotelRooms.Remove(roomDetails);
                 return await _db.SaveChangesAsync();
             }
+
             return 0;
         }
 
@@ -49,8 +50,8 @@ namespace Business.Repository.IRepository
             try
             {
                 IEnumerable<HotelRoomDTO> hotelRoomDTOs =
-                    _mapper.Map<IEnumerable<HotelRoom>, IEnumerable<HotelRoomDTO>>
-                    (_db.HotelRooms.Include(x => x.HotelRoomImages));
+                    _mapper.Map<IEnumerable<HotelRoom>, IEnumerable<HotelRoomDTO>>(
+                    _db.HotelRooms.Include(x => x.HotelRoomImages));
 
                 if (!string.IsNullOrEmpty(checkInDateStr) && !string.IsNullOrEmpty(checkOutDateStr))
                 {
@@ -59,6 +60,7 @@ namespace Business.Repository.IRepository
                         hotelRoom.IsBooked = await IsRoomBooked(hotelRoom.Id, checkInDateStr, checkOutDateStr);
                     }
                 }
+
                 return hotelRoomDTOs;
             }
             catch (Exception)
@@ -81,7 +83,7 @@ namespace Business.Repository.IRepository
 
                 return hotelRoom;
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -97,9 +99,11 @@ namespace Business.Repository.IRepository
                     DateTime checkOutDate = DateTime.ParseExact(checkOutDateStr, "MM/dd/yyyy", null);
 
                     var existingBooking = await _db.RoomOrderDetails.Where(x => x.RoomId == roomId && x.IsPaymentSuccessful &&
-                         //check if checkin date that user want does not fall in between any dates for room that is booked
+
+                         // check if checkin date that user want does not fall in between any dates for room that is booked
                          ((checkInDate.Date < x.CheckOutDate && checkInDate.Date >= x.CheckInDate)
-                         //check if checkout date that user wants does not fall in between any dates for room that is booked
+
+                         // check if checkout date that user wants does not fall in between any dates for room that is booked
                          || (checkOutDate.Date > x.CheckInDate.Date && checkInDate.Date <= x.CheckInDate.Date))).FirstOrDefaultAsync();
 
                     if (existingBooking != null)
@@ -107,6 +111,7 @@ namespace Business.Repository.IRepository
                         return true;
                     }
                 }
+
                 return false;
             }
             catch (Exception)
@@ -115,7 +120,7 @@ namespace Business.Repository.IRepository
             }
         }
 
-        //if unique return null else retrurn the room obj
+        // if unique return null else retrurn the room obj
         public async Task<HotelRoomDTO> IsRoomUnique(string name, int id = 0)
         {
             try
@@ -135,7 +140,7 @@ namespace Business.Repository.IRepository
                     return hotelRoom;
                 }
             }
-            catch (Exception ex)
+            catch (Exception)
             {
                 return null;
             }
@@ -147,10 +152,10 @@ namespace Business.Repository.IRepository
             {
                 if (roomId == hotelRoomDTO.Id)
                 {
-                    //valid
+                    // valid
                     HotelRoom roomDetails = await _db.HotelRooms.FindAsync(roomId);
                     HotelRoom room = _mapper.Map<HotelRoomDTO, HotelRoom>(hotelRoomDTO, roomDetails);
-                    room.UpdatedBy = "";
+                    room.UpdatedBy = string.Empty;
                     room.UpdatedDate = DateTime.Now;
                     var updatedRoom = _db.HotelRooms.Update(room);
                     await _db.SaveChangesAsync();
@@ -158,7 +163,7 @@ namespace Business.Repository.IRepository
                 }
                 else
                 {
-                    //invalid
+                    // invalid
                     return null;
                 }
             }

@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Components.Forms;
-using Microsoft.AspNetCore.Hosting;
-using Microsoft.AspNetCore.Http;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.IO;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Components.Forms;
+using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Http;
 
 namespace HiddenVilla_Server.Service.IService
 {
@@ -30,11 +30,11 @@ namespace HiddenVilla_Server.Service.IService
                     File.Delete(path);
                     return true;
                 }
+
                 return false;
             }
             catch (Exception)
             {
-
                 throw;
             }
         }
@@ -67,7 +67,6 @@ namespace HiddenVilla_Server.Service.IService
             }
             catch (Exception)
             {
-
                 throw;
             }
         }

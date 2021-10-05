@@ -80,6 +80,7 @@ namespace HiddenVilla_Server.Areas.Identity.Pages.Account.Manage
                 {
                     ModelState.AddModelError(string.Empty, error.Description);
                 }
+
                 return Page();
             }
 

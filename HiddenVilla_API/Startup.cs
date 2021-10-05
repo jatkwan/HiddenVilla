@@ -1,4 +1,12 @@
+using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using Business.Repository;
+using Business.Repository.IRepository;
 using DataAcess.Data;
+using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.AspNetCore.HttpsPolicy;
@@ -9,18 +17,10 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
-using Microsoft.OpenApi.Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Threading.Tasks;
-using Business.Repository.IRepository;
-using Models;
-using System.Text;
-using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.OpenApi.Models;
+using Models;
 using Newtonsoft.Json.Serialization;
-using Business.Repository;
 using Stripe;
 
 namespace HiddenVilla_API
@@ -99,7 +99,8 @@ namespace HiddenVilla_API
                     Name = "Authorization",
                     Type = SecuritySchemeType.ApiKey
                 });
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement {
+                c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                {
                    {
                      new OpenApiSecurityScheme
                      {
@@ -108,9 +109,9 @@ namespace HiddenVilla_API
                          Type = ReferenceType.SecurityScheme,
                          Id = "Bearer"
                        }
-                      },
-                      new string[] { }
-                    }
+                     },
+                     new string[] { }
+                   }
                 });
             });
         }

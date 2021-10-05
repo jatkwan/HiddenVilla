@@ -1,11 +1,11 @@
-﻿using Business.Repository.IRepository;
-using Microsoft.AspNetCore.Mvc;
-using Models;
-using Stripe.Checkout;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Business.Repository.IRepository;
+using Microsoft.AspNetCore.Mvc;
+using Models;
+using Stripe.Checkout;
 
 namespace HiddenVilla_API.Controllers
 {
@@ -52,6 +52,7 @@ namespace HiddenVilla_API.Controllers
                         ErrorMessage = "Can not mark payment sucessful"
                     });
                 }
+
                 return Ok(result);
             }
             else

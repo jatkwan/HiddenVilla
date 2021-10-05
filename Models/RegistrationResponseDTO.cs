@@ -9,6 +9,7 @@ namespace Models
     public class RegistrationResponseDTO
     {
         public bool IsRegisterationSucessful { get; set; }
+
         public IEnumerable<string> Errors { get; set; }
     }
 }

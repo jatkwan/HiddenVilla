@@ -5,6 +5,14 @@
 @inject NavigationManager navigationManager
 @inject IHotelAmenityService HotelAmenityService
 
+<AuthorizeView>
+    <Authorized>
+        <p>Welcome, @context.User.Identity.Name</p>
+    </Authorized>
+    <NotAuthorized>
+        <p>Not signed in!</p>
+    </NotAuthorized>
+</AuthorizeView>
 <div class="row p-0 m-0">
     <div id="carouselExampleIndicators" class="carousel slide" data-ride="carousel">
         <ol class="carousel-indicators">
@@ -82,7 +90,7 @@
         }
     </div>
 </div>
-}
+    }
 
 @code{
 

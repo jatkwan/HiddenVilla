@@ -1,11 +1,11 @@
-﻿using HiddenVilla_Client.Service.IService;
-using Models;
-using Newtonsoft.Json;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Net.Http;
 using System.Threading.Tasks;
+using HiddenVilla_Client.Service.IService;
+using Models;
+using Newtonsoft.Json;
 
 namespace HiddenVilla_Client.Service
 {

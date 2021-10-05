@@ -1,4 +1,11 @@
-﻿using Common;
+﻿using System;
+using System.Collections.Generic;
+using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using System.Security.Claims;
+using System.Text;
+using System.Threading.Tasks;
+using Common;
 using DataAcess.Data;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
@@ -6,13 +13,6 @@ using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using Models;
-using System;
-using System.Collections.Generic;
-using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using System.Security.Claims;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace HiddenVilla_API.Controllers
 {
@@ -26,7 +26,8 @@ namespace HiddenVilla_API.Controllers
         private readonly RoleManager<IdentityRole> _roleManager;
         private readonly APISettings _aPISettings;
 
-        public AccountController(SignInManager<ApplicationUser> signInManager,
+        public AccountController(
+            SignInManager<ApplicationUser> signInManager,
             UserManager<ApplicationUser> userManager,
             RoleManager<IdentityRole> roleManager,
             IOptions<APISettings> options)
@@ -84,8 +85,11 @@ namespace HiddenVilla_API.Controllers
         [AllowAnonymous]
         public async Task<IActionResult> SignIn([FromBody] AuthenticationDTO authenticationDTO)
         {
-            var result = await _signInManager.PasswordSignInAsync(authenticationDTO.Username,
-                authenticationDTO.Password, false, false);
+            var result = await _signInManager.PasswordSignInAsync(
+                authenticationDTO.Username,
+                authenticationDTO.Password,
+                false,
+                false);
             if (result.Succeeded)
             {
                 var user = await _userManager.FindByNameAsync(authenticationDTO.Username);
@@ -98,7 +102,7 @@ namespace HiddenVilla_API.Controllers
                     });
                 }
 
-                //if everthing is valid we need to login the user
+                // if everthing is valid we need to login the user
                 var signinCredentials = GetSigningCredentials();
                 var claims = await GetClaims(user);
 
@@ -115,7 +119,7 @@ namespace HiddenVilla_API.Controllers
                 {
                     IsAuthSucessful = true,
                     Token = token,
-                    userDTO = new UserDTO
+                    UserDTO = new UserDTO
                     {
                         Name = user.Name,
                         Id = user.Id,

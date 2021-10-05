@@ -1,14 +1,14 @@
-﻿using AutoMapper;
+﻿using System;
+using System.Collections.Generic;
+using System.Linq;
+using System.Text;
+using System.Threading.Tasks;
+using AutoMapper;
 using Business.Repository.IRepository;
 using Common;
 using DataAcess.Data;
 using Microsoft.EntityFrameworkCore;
 using Models;
-using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
 
 namespace Business.Repository
 {
@@ -83,6 +83,7 @@ namespace Business.Repository
             {
                 return null;
             }
+
             if (!data.IsPaymentSuccessful)
             {
                 data.IsPaymentSuccessful = true;
@@ -91,6 +92,7 @@ namespace Business.Repository
                 await _db.SaveChangesAsync();
                 return _mapper.Map<RoomOrderDetail, RoomOrderDetailDTO>(markPaymentSucessful.Entity);
             }
+
             return new RoomOrderDetailDTO();
         }
 

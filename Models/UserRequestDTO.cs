@@ -21,6 +21,7 @@ namespace Models
         [Required(ErrorMessage = "Password is required.")]
         [DataType(DataType.Password)]
         public string Password { get; set; }
+
         [Required(ErrorMessage = "Confirm password is required")]
         [DataType(DataType.Password)]
         [Compare("Password", ErrorMessage = "Password and confirm password is not matched")]

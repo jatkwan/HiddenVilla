@@ -9,8 +9,11 @@ namespace Models
     public class AuthenticationResponseDTO
     {
         public bool IsAuthSucessful { get; set; }
+
         public string ErrorsMessage { get; set; }
+
         public string Token { get; set; }
-        public UserDTO userDTO { get; set; }
+
+        public UserDTO UserDTO { get; set; }
     }
 }

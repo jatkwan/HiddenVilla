@@ -1,12 +1,12 @@
-﻿using AutoMapper;
-using DataAcess.Data;
-using Microsoft.EntityFrameworkCore;
-using Models;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Text;
 using System.Threading.Tasks;
+using AutoMapper;
+using DataAcess.Data;
+using Microsoft.EntityFrameworkCore;
+using Models;
 
 namespace Business.Repository.IRepository
 {
@@ -25,7 +25,7 @@ namespace Business.Repository.IRepository
         {
             HotelAmenity hotelAmenity = _mapper.Map<HotelAmenityDTO, HotelAmenity>(hotelAmenityDTO);
             hotelAmenity.CreatedDate = DateTime.Now;
-            hotelAmenity.CreatedBy = "";
+            hotelAmenity.CreatedBy = string.Empty;
             var addedHotelAmenity = await _db.HotelAmenities.AddAsync(hotelAmenity);
             await _db.SaveChangesAsync();
             return _mapper.Map<HotelAmenity, HotelAmenityDTO>(addedHotelAmenity.Entity);
@@ -39,6 +39,7 @@ namespace Business.Repository.IRepository
                 _db.HotelAmenities.Remove(hotelAmenity);
                 return await _db.SaveChangesAsync();
             }
+
             return 0;
         }
 
@@ -104,10 +105,10 @@ namespace Business.Repository.IRepository
             {
                 if (amenityId == hotelAmenityDTO.Id)
                 {
-                    //valid
+                    // valid
                     HotelAmenity hotelAmenity = await _db.HotelAmenities.FindAsync(amenityId);
                     HotelAmenity amenity = _mapper.Map<HotelAmenityDTO, HotelAmenity>(hotelAmenityDTO, hotelAmenity);
-                    amenity.UpdatedBy = "";
+                    amenity.UpdatedBy = string.Empty;
                     amenity.UpdatedDate = DateTime.Now;
                     var updatedAmenity = _db.HotelAmenities.Update(amenity);
                     await _db.SaveChangesAsync();
@@ -115,7 +116,7 @@ namespace Business.Repository.IRepository
                 }
                 else
                 {
-                    //invalid
+                    // invalid
                     return null;
                 }
             }

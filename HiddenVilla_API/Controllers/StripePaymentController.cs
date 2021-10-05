@@ -1,11 +1,11 @@
-﻿using Microsoft.AspNetCore.Mvc;
-using Microsoft.Extensions.Configuration;
-using Models;
-using Stripe.Checkout;
-using System;
+﻿using System;
 using System.Collections.Generic;
 using System.Linq;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Mvc;
+using Microsoft.Extensions.Configuration;
+using Models;
+using Stripe.Checkout;
 
 namespace HiddenVilla_API.Controllers
 {
@@ -31,7 +31,8 @@ namespace HiddenVilla_API.Controllers
                 {
                     PaymentMethodTypes = new List<string>
                     {
-                        "card"                    },
+                        "card"
+                    },
                     LineItems = new List<SessionLineItemOptions>
                     {
                         new SessionLineItemOptions
@@ -43,10 +44,10 @@ namespace HiddenVilla_API.Controllers
                                 ProductData = new SessionLineItemPriceDataProductDataOptions
                                 {
                                     Name = payment.ProductName
-                                }
+                                },
                             },
                             Quantity = 1
-                        }
+                        },
                     },
                     Mode = "payment",
                     SuccessUrl = domain + "/success-payment?session_id={{CHECKOUT_SESSION_ID}}",
