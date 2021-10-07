@@ -27,16 +27,9 @@ namespace HiddenVilla_Server.Service.IService
 
         public void Initalize()
         {
-            try
+            if (_db.Database.GetPendingMigrations().Any())
             {
-                if (_db.Database.GetPendingMigrations().Any())
-                {
-                    _db.Database.Migrate();
-                }
-            }
-            catch (Exception)
-            {
-                throw;
+                _db.Database.Migrate();
             }
 
             if (_db.Roles.Any(x => x.Name == SD.Role_Admin))

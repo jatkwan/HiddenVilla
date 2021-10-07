@@ -31,3 +31,11 @@ dotnet_diagnostic.SA1601.severity = none
 
 # SA1201: Elements should appear in the correct order
 dotnet_diagnostic.SA1201.severity = none
+dotnet_diagnostic.S112.severity=silent
+dotnet_diagnostic.S1144.severity=silent
+dotnet_diagnostic.S125.severity=silent
+dotnet_diagnostic.S3925.severity=silent
+dotnet_diagnostic.S4144.severity=silent
+dotnet_diagnostic.S101.severity=silent
+dotnet_diagnostic.S1199.severity=silent
+dotnet_diagnostic.S3459.severity=silent

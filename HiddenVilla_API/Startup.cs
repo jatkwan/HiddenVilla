@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Business.Repository;
 using Business.Repository.IRepository;
 using DataAcess.Data;
+using HiddenVilla_API.Helper;
 using Microsoft.AspNetCore.Authentication.JwtBearer;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
@@ -19,7 +20,6 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.Extensions.Logging;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
-using Models;
 using Newtonsoft.Json.Serialization;
 using Stripe;
 
@@ -45,6 +45,8 @@ namespace HiddenVilla_API
 
             var appSettingSection = Configuration.GetSection("APISettings");
             services.Configure<APISettings>(appSettingSection);
+
+            services.Configure<MailJetSettings>(Configuration.GetSection("MailJetSettings"));
 
             var apiSettings = appSettingSection.Get<APISettings>();
             var key = Encoding.ASCII.GetBytes(apiSettings.SecretKey);

@@ -41,7 +41,6 @@ namespace HiddenVilla_Client.Service
 
         public async Task<RoomOrderDetailDTO> SaveRoomOrderDetail(RoomOrderDetailDTO roomOrderDetail)
         {
-            roomOrderDetail.UserId = "dummy user";
             var content = JsonConvert.SerializeObject(roomOrderDetail);
             var bodyContent = new StringContent(content, Encoding.UTF8, "application/json");
             var response = await _httpClient.PostAsync("api/roomorder/create", bodyContent);
